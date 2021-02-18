@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Georgia:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="做个局域网服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 18 Server Set-up">
+<meta property="og:url" content="http://example.com/2021/02/18/Ubuntu_18_Server/index.html">
+<meta property="og:site_name" content="Alan&#39;s Blog">
+<meta property="og:description" content="做个局域网服务器">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ubuntucommunity.s3.dualstack.us-east-2.amazonaws.com/original/2X/c/c8d89e0c41f6d31f0a4aa38675020973b43d46c9.png">
+<meta property="og:image" content="http://example.com/2021/02/18/Ubuntu_18_Server/iwconfig.png">
+<meta property="og:image" content="http://example.com/2021/02/18/Ubuntu_18_Server/lshw.png">
+<meta property="article:published_time" content="2021-02-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-02-18T12:47:07.844Z">
+<meta property="article:author" content="Alan Huang">
+<meta property="article:tag" content="tips">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ubuntucommunity.s3.dualstack.us-east-2.amazonaws.com/original/2X/c/c8d89e0c41f6d31f0a4aa38675020973b43d46c9.png">
+
+<link rel="canonical" href="http://example.com/2021/02/18/Ubuntu_18_Server/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Ubuntu 18 Server Set-up | Alan's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Alan's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Family, Always and Forever.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/18/Ubuntu_18_Server/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/gt.jpg">
+      <meta itemprop="name" content="Alan Huang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Alan's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu 18 Server Set-up
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-02-18 00:00:00 / Modified: 20:47:07" itemprop="dateCreated datePublished" datetime="2021-02-18T00:00:00+08:00">2021-02-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>做个局域网服务器</p>
+<a id="more"></a>
+
+<h1 id="安装ubuntu-18-server"><a href="#安装ubuntu-18-server" class="headerlink" title="安装ubuntu 18 server"></a>安装ubuntu 18 server</h1><p>玩树莓派4b玩了几天发现没什么可玩的，大年二十九那天突然想起来家里面还有一个很老的联想笔记本电脑一直没人用，基本上就是废了的，cpu是奔腾p6200的吧，2g的ram，连win7都运行不了的，型号是B460。然后大年三十就下午把电脑拿出来，发现基本上是打不开win7系统了，但是不清楚还有什么文件在里面，然后就用之前做的pe系统看看还有什么重要内容，移出来点东西，之后又把电脑拆开，清理了风扇的灰尘（其实没什么用，应该是机器太老了，10多年前的，清理后还是随随便便就有风扇声，而且还很大，不过作为服务器就不管了），在考虑要不要加点内存或者换cpu，但是感觉不值当。</p>
+<h2 id="Create-a-bootable-USB-stick-on-Windows"><a href="#Create-a-bootable-USB-stick-on-Windows" class="headerlink" title="Create a bootable USB stick on Windows"></a>Create a bootable USB stick on Windows</h2><p>基本上就是参考官方的指南：<a target="_blank" rel="noopener" href="https://ubuntu.com/tutorials/create-a-usb-stick-on-windows#1-overview">https://ubuntu.com/tutorials/create-a-usb-stick-on-windows#1-overview</a> ，我也用rufus制作的usb。下载的是<a target="_blank" rel="noopener" href="https://releases.ubuntu.com/18.04/ubuntu-18.04.5-live-server-amd64.iso">Ubuntu 18 Server LTS</a>，后面确认后有additional download，这个选择确认，再后面有提醒说Ubuntu ISO是ISOHybrid image，此时确认Write in ISO Image mode，之后等待就可以了。<br><img src="https://ubuntucommunity.s3.dualstack.us-east-2.amazonaws.com/original/2X/c/c8d89e0c41f6d31f0a4aa38675020973b43d46c9.png"></p>
+<h2 id="Installation-and-miscellaneous"><a href="#Installation-and-miscellaneous" class="headerlink" title="Installation and miscellaneous"></a>Installation and miscellaneous</h2><p>开机f12进入bios，选中u盘就可以一步到底直接安装。最麻烦的是安装之后的网络问题，Wi-Fi和ethernet全部报废，我折腾了好几个小时。<br>此时正确的做法应该是先修好ethernet再修Wi-Fi，我当时是搞反了，浪费了大量时间。</p>
+<h3 id="Fix-Wi-Fi"><a href="#Fix-Wi-Fi" class="headerlink" title="Fix Wi-Fi:"></a>Fix Wi-Fi:</h3><p>Wi-Fi：因为没有有线网，就只能本地安装一些package，但是dependency还要一直安装下去，所以就特别特别麻烦。主要需要安装两个包，一个是wireless-tools，一个是wpasupplicant，都是挺重要的包，很好奇是不是就是server版本的没有。</p>
+<p>从usb安装package:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">lsblk</span><br><span class="line">sudo blkid</span><br><span class="line">sudo fdisk -l # 前面三个是为了看插入的usb的设备名，随便一个就可以</span><br><span class="line">sudo  mkdir &#x2F;media&#x2F;usb # Create a mount point (optional)</span><br><span class="line">sudo mount &#x2F;dev&#x2F;sdb1 &#x2F;media&#x2F;usb # mount</span><br><span class="line">cd &#x2F;media&#x2F;usb</span><br><span class="line">ls</span><br><span class="line">sudo dpkg -i install wireless-tools.deb</span><br><span class="line">sudo umount &#x2F;media&#x2F;usb # unmmount</span><br></pre></td></tr></table></figure>
+<p>然后用<code>iwconfig</code>来查看可用的Wi-Fi设备<br><img src="iwconfig.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo ifconfig wlp4s0b1 up</span><br><span class="line">sudo iwlist wlp4s0b1 scan | grep ESSID</span><br><span class="line">wpa_passphrase &quot;ESSID&quot; &quot;passwd&quot; | sudo tee &#x2F;etc&#x2F;wpa_supplicant.conf</span><br><span class="line">sudo wpa_supplicant -c &#x2F;etc&#x2F;wpa_supplicant.conf -i wlp4s0b1</span><br></pre></td></tr></table></figure>
+<p>这样Wi-Fi就好了。</p>
+<h3 id="合盖不休眠"><a href="#合盖不休眠" class="headerlink" title="合盖不休眠"></a>合盖不休眠</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo nano &#x2F;etc&#x2F;systemd&#x2F;logind.conf</span><br><span class="line">HandleLidSwitch&#x3D;ignore</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo restart systemd-logind  </span><br><span class="line">service systemd-logind restart</span><br><span class="line">sudo shutdown -r now</span><br><span class="line">reboot</span><br><span class="line"># 四个方法选一个就好</span><br></pre></td></tr></table></figure>
+
+<h3 id="Fix-Ethernet"><a href="#Fix-Ethernet" class="headerlink" title="Fix Ethernet"></a>Fix Ethernet</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo lshw -C network #查看网络硬件，发现ethernet被disable</span><br><span class="line">sudo nano &#x2F;etc&#x2F;network&#x2F;interfaces</span><br><span class="line">auto enp3s0 #如果不是一直使用ethernet，将auto改为allow-hotplug可以节省开机时间</span><br><span class="line">iface enp3s0 inet dhcp #保存并推出，&#96;Ctrl+O&#96;+&#96;Enter&#96;,&#96;Ctrl+X&#96;</span><br><span class="line">sudo ifup enp8s0</span><br><span class="line">systemctl list-unit-files | grep -i network # check the service names, 不同系统的network manager可能名字不一样，用这个来找</span><br><span class="line">systemctl restart systemd-networkd</span><br></pre></td></tr></table></figure>
+<p><img src="lshw.png"></p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update        # Fetches the list of available updates</span><br><span class="line">sudo apt upgrade       # Installs some updates; does not remove packages</span><br><span class="line">sudo apt full-upgrade  # Installs updates; may also remove some packages, if needed</span><br><span class="line">sudo apt autoremove    # Removes any old packages that are no longer needed</span><br></pre></td></tr></table></figure>
+<h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove docker docker-engine docker.io containerd runc # Uninstall old versions</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br><span class="line">sudo docker run hello-world #Verify that Docker Engine is installed correctly</span><br></pre></td></tr></table></figure>
+<p>Run Deemix Docker:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d --name Deemix \</span><br><span class="line">              -v &#x2F;media&#x2F;deemix&#x2F;Music&#x2F;deemix:&#x2F;downloads \</span><br><span class="line">              -e ARL&#x3D;deezer&#39;s arl \</span><br><span class="line">              -p 6595:6595 \</span><br><span class="line">              registry.gitlab.com&#x2F;bockiii&#x2F;deemix-docker</span><br></pre></td></tr></table></figure>
+
+<p>Have fun at: <code>http://alan:6595</code> (alan是server的名字，在同一局域网内，直接用alan这个设备名来代替局域网内的IP地址，算是local dns(?))</p>
+<h3 id="安装nextcloud"><a href="#安装nextcloud" class="headerlink" title="安装nextcloud"></a>安装nextcloud</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo snap install nextcloud # install nextcloud using snap</span><br><span class="line">snap changes nextcloud # see changes</span><br><span class="line">sudo nextcloud.manual-install alan password # configure Nextcloud with a new administrator account, a long and non-responsive wait</span><br><span class="line">sudo nextcloud.occ config:system:get trusted_domains</span><br><span class="line">sudo nextcloud.occ config:system:set trusted_domains 1 --value&#x3D;alan</span><br><span class="line">sudo nextcloud.occ config:system:set trusted_domains 2 --value&#x3D;&#96;local ip&#96;</span><br><span class="line">sudo nextcloud.occ config:system:get trusted_domains # query the trusted domains again</span><br><span class="line">snap set nextcloud ports.http&#x3D;81 ports.https&#x3D;444 # very important, nginx uses 80 and 843 as default http and https connection.</span><br><span class="line">sudo nextcloud.enable-https self-signed # generate a self-signed certificate</span><br><span class="line">sudo ufw allow 81,444&#x2F;tcp # if you have ufw enabled, open the web ports in the firewall to allow access</span><br></pre></td></tr></table></figure>
+<p>Log in <code>http://alan:81</code>, and have fun.</p>
+<h3 id="安装samba"><a href="#安装samba" class="headerlink" title="安装samba"></a>安装samba</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install samba</span><br><span class="line">whereis samba # check if the installation was successful</span><br></pre></td></tr></table></figure>
+<p>now configure samba: <code>sudo nano /etc/samba/smb.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[sambashare]</span><br><span class="line">    comment &#x3D; Samba on Ubuntu</span><br><span class="line">    path &#x3D; &#x2F;home&#x2F;username&#x2F;sambashare</span><br><span class="line">    read only &#x3D; no</span><br><span class="line">    browsable &#x3D; yes</span><br><span class="line">[Docs]</span><br><span class="line">    comment &#x3D; Docs</span><br><span class="line">    path &#x3D; &lt;path&gt;</span><br><span class="line">    public &#x3D; no</span><br><span class="line">    writable &#x3D; yes</span><br><span class="line">[public]</span><br><span class="line">    path &#x3D; &lt;path&gt;</span><br><span class="line">    public &#x3D; yes</span><br><span class="line">    only guest &#x3D; yes</span><br><span class="line">    writable &#x3D; yes</span><br><span class="line">    printable &#x3D; no</span><br></pre></td></tr></table></figure>
+<p>Press <code>Ctrl-O</code> to save and <code>Ctrl-X</code> to exit from the nano text editor.<br>then</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo service smbd restart</span><br><span class="line">sudo ufw allow samba</span><br><span class="line">sudo smbpasswd -a username # Setting up User Accounts and Connecting to Share</span><br></pre></td></tr></table></figure>
+<p>Use nplayer or MXplayer on iOS/Android to access samba sharing files.</p>
+<h3 id="安装miniconda和jupyter-notebook"><a href="#安装miniconda和jupyter-notebook" class="headerlink" title="安装miniconda和jupyter notebook"></a>安装miniconda和jupyter notebook</h3><p>参考：<a target="_blank" rel="noopener" href="https://conda.io/projects/conda/en/latest/user-guide/install/linux.html">https://conda.io/projects/conda/en/latest/user-guide/install/linux.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;repo.anaconda.com&#x2F;miniconda&#x2F;Miniconda3-latest-Linux-x86_64.sh</span><br><span class="line">sha256sum Miniconda3-latest-Linux-x86_64.sh # verify hashes</span><br><span class="line">bash Miniconda3-latest-Linux-x86_64.sh</span><br><span class="line">conda list</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda create --name py38 python&#x3D;3.8 # install python 3.8, ubuntu 18 server LTS自带的python是2.7和3.7</span><br><span class="line">python --version</span><br><span class="line">conda activate py38</span><br><span class="line">conda install jupyterlab</span><br><span class="line">jupyter-notebook # 或者jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>To make jupyter notebook running in the background, use<code>tmux</code>, and activate py38, use jupyter noteboook, press <code>Ctrl+B</code> and <code>D</code> (mean: detach) to detach from tmux screen, to reenter tmux, use <code>tmux attach</code>, to terminate jupyter, use <code>Ctrl+C</code>, to terminate tmux, use <code>exit</code>.<br>Install jupyterthemes:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda install -c conda-forge jupyterthemes</span><br><span class="line">jt -t onedork -f fira -fs 16</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装酸酸乳"><a href="#安装酸酸乳" class="headerlink" title="安装酸酸乳"></a>安装酸酸乳</h3><p>socks5 proxy:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;tmp</span><br><span class="line">wget https:&#x2F;&#x2F;github.com&#x2F;the0demiurge&#x2F;CharlesScripts&#x2F;raw&#x2F;master&#x2F;charles&#x2F;bin&#x2F;ssr</span><br><span class="line">sudo mv ssr &#x2F;usr&#x2F;local&#x2F;bin</span><br><span class="line">sudo chmod 766 &#x2F;usr&#x2F;local&#x2F;bin&#x2F;ssr</span><br><span class="line">sudo ssr install</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ssr help</span><br><span class="line">sudo ssr config</span><br><span class="line">sudo ssr test</span><br></pre></td></tr></table></figure>
+<p>transfer socks5 to http:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install privoxy</span><br><span class="line">sudo nano &#x2F;etc&#x2F;privoxy&#x2F;config</span><br></pre></td></tr></table></figure>
+<p>add: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">listen-address 127.0.0.1:8118</span><br><span class="line">listen-address [::1]:8118</span><br><span class="line">forward-socks5t   &#x2F;               127.0.0.1:1080 .</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service privoxy start</span><br></pre></td></tr></table></figure>
+<p>Set Global Proxy:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export http_proxy&#x3D;&#39;http:&#x2F;&#x2F;localhost:8118&#39;</span><br><span class="line">export https_proxy&#x3D;&#39;http:&#x2F;&#x2F;localhost:8118&#39;</span><br></pre></td></tr></table></figure>
+<p>Unset Global Proxy:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unset http_proxy</span><br><span class="line">unset https_proxy</span><br></pre></td></tr></table></figure>
+<p>Test Proxy:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl www.google.com</span><br><span class="line">curl myip.ipip.net</span><br></pre></td></tr></table></figure>
+<p>For Git:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy &#39;socks5:&#x2F;&#x2F;127.0.0.1:1080&#39;</span><br><span class="line">git config --global https.proxy &#39;socks5:&#x2F;&#x2F;127.0.0.1:1080&#39;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br></pre></td></tr></table></figure>
+
+
+
+<p>参考:<br>所有的都是Google和stack exchange等网站上找的。<br><a href="">https://www.bilibili.com/video/av20036348/</a><br><a href="">https://ubuntu.com/tutorials/create-a-usb-stick-on-windows#1-overview</a><br><a target="_blank" rel="noopener" href="https://ubuntu.com/tutorials/install-and-configure-samba#1-overview">https://ubuntu.com/tutorials/install-and-configure-samba#1-overview</a><br><a href="">https://unix.stackexchange.com/questions/48179/sharing-multiple-folders-with-samba</a><br><a href="">https://conda.io/projects/conda/en/latest/user-guide/install/linux.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tips/" rel="tag"># tips</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/09/hoist-the-colours/" rel="prev" title="Hoist the colours">
+      <i class="fa fa-chevron-left"></i> Hoist the colours
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85ubuntu-18-server"><span class="nav-number">1.</span> <span class="nav-text">安装ubuntu 18 server</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-a-bootable-USB-stick-on-Windows"><span class="nav-number">1.1.</span> <span class="nav-text">Create a bootable USB stick on Windows</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Installation-and-miscellaneous"><span class="nav-number">1.2.</span> <span class="nav-text">Installation and miscellaneous</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fix-Wi-Fi"><span class="nav-number">1.2.1.</span> <span class="nav-text">Fix Wi-Fi:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E7%9B%96%E4%B8%8D%E4%BC%91%E7%9C%A0"><span class="nav-number">1.2.2.</span> <span class="nav-text">合盖不休眠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fix-Ethernet"><span class="nav-number">1.2.3.</span> <span class="nav-text">Fix Ethernet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.4.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85docker"><span class="nav-number">1.2.5.</span> <span class="nav-text">安装docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85nextcloud"><span class="nav-number">1.2.6.</span> <span class="nav-text">安装nextcloud</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85samba"><span class="nav-number">1.2.7.</span> <span class="nav-text">安装samba</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85miniconda%E5%92%8Cjupyter-notebook"><span class="nav-number">1.2.8.</span> <span class="nav-text">安装miniconda和jupyter notebook</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%85%B8%E9%85%B8%E4%B9%B3"><span class="nav-number">1.2.9.</span> <span class="nav-text">安装酸酸乳</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alan Huang"
+      src="/images/gt.jpg">
+  <p class="site-author-name" itemprop="name">Alan Huang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alan Huang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
