@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://example.com/2021/02/18/Ubuntu_18_Server/iwconfig.png">
 <meta property="og:image" content="http://example.com/2021/02/18/Ubuntu_18_Server/lshw.png">
 <meta property="article:published_time" content="2021-02-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-02-18T12:47:07.844Z">
+<meta property="article:modified_time" content="2021-02-21T13:39:58.207Z">
 <meta property="article:author" content="Alan Huang">
 <meta property="article:tag" content="tips">
 <meta name="twitter:card" content="summary">
@@ -188,10 +188,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-02-18 00:00:00 / Modified: 20:47:07" itemprop="dateCreated datePublished" datetime="2021-02-18T00:00:00+08:00">2021-02-18</time>
+              <time title="Created: 2021-02-18 00:00:00" itemprop="dateCreated datePublished" datetime="2021-02-18T00:00:00+08:00">2021-02-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-21 21:39:58" itemprop="dateModified" datetime="2021-02-21T21:39:58+08:00">2021-02-21</time>
+              </span>
 
           
             <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
@@ -206,14 +212,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6.3k</span>
+              <span>7.7k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
+              <span>7 mins.</span>
             </span>
 
         </div>
@@ -248,6 +254,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d --name Deemix \</span><br><span class="line">              -v &#x2F;media&#x2F;deemix&#x2F;Music&#x2F;deemix:&#x2F;downloads \</span><br><span class="line">              -e ARL&#x3D;deezer&#39;s arl \</span><br><span class="line">              -p 6595:6595 \</span><br><span class="line">              registry.gitlab.com&#x2F;bockiii&#x2F;deemix-docker</span><br></pre></td></tr></table></figure>
 
 <p>Have fun at: <code>http://alan:6595</code> (alan是server的名字，在同一局域网内，直接用alan这个设备名来代替局域网内的IP地址，算是local dns(?))</p>
+<p>常见command</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">docker container ls -a # list all Docker containers</span><br><span class="line">docker container ls –aq #  all the containers only by their numeric ID’s</span><br><span class="line">docker container stop [container_id]</span><br><span class="line">docker container stop $(docker container ls –aq) # stop all containers</span><br><span class="line">docker container rm [container_id]</span><br><span class="line">docker container rm $(docker container ls –aq)</span><br><span class="line">docker container stop $(docker container ls –aq) &amp;&amp; docker system prune –af ––volumes # To wipe Docker clean and start from scratch, The &amp;&amp; attribute instructs Docker to remove all stopped containers and volumes. –af indicates this should apply to all containers (a) without a required confirmation (f).</span><br><span class="line">docker container prune ––filter&#x3D;”label!&#x3D;maintainer&#x3D;Jeremy” # remove all containers that are not labeled with a maintainer of “jeremy.” </span><br><span class="line">docker image ls # Docker images are files, which include multiple layers used to run code within a container. Images may go through many iterations during development. Old and outdated images can clutter your system.</span><br><span class="line">docker image rm [image_id1] [image_id2]</span><br><span class="line">docker image prune –a ––filter “until&#x3D;24h” # This removes all (–a) images created over the last 24 hours.</span><br><span class="line">docker image prune ––filter&#x3D;”label&#x3D;old”</span><br><span class="line">docker container prune ––filter&#x3D;”label&#x3D;maintainer&#x3D;bill”</span><br><span class="line">docker volume ls # A volume is used to store Docker data.</span><br><span class="line">docker volume rm VolumeName</span><br><span class="line">docker network ls</span><br><span class="line">docker network rm [networkID] </span><br><span class="line">docker system prune -a # removes both unused and dangling images . Images used in a container, either currently running or exited, will NOT be affected.</span><br><span class="line">docker container prune</span><br><span class="line">docker image prune</span><br><span class="line">docker volume prune</span><br><span class="line">docker network prune</span><br><span class="line">docker info</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="安装nextcloud"><a href="#安装nextcloud" class="headerlink" title="安装nextcloud"></a>安装nextcloud</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo snap install nextcloud # install nextcloud using snap</span><br><span class="line">snap changes nextcloud # see changes</span><br><span class="line">sudo nextcloud.manual-install alan password # configure Nextcloud with a new administrator account, a long and non-responsive wait</span><br><span class="line">sudo nextcloud.occ config:system:get trusted_domains</span><br><span class="line">sudo nextcloud.occ config:system:set trusted_domains 1 --value&#x3D;alan</span><br><span class="line">sudo nextcloud.occ config:system:set trusted_domains 2 --value&#x3D;&#96;local ip&#96;</span><br><span class="line">sudo nextcloud.occ config:system:get trusted_domains # query the trusted domains again</span><br><span class="line">snap set nextcloud ports.http&#x3D;81 ports.https&#x3D;444 # very important, nginx uses 80 and 843 as default http and https connection.</span><br><span class="line">sudo nextcloud.enable-https self-signed # generate a self-signed certificate</span><br><span class="line">sudo ufw allow 81,444&#x2F;tcp # if you have ufw enabled, open the web ports in the firewall to allow access</span><br></pre></td></tr></table></figure>
 <p>Log in <code>http://alan:81</code>, and have fun.</p>
 <h3 id="安装samba"><a href="#安装samba" class="headerlink" title="安装samba"></a>安装samba</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install samba</span><br><span class="line">whereis samba # check if the installation was successful</span><br></pre></td></tr></table></figure>
@@ -448,13 +459,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">14k</span>
+    <span title="Symbols count total">15k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">13 mins.</span>
+    <span title="Reading time total">14 mins.</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
   </div>
